@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 
 #define MAX 100
@@ -7,16 +8,24 @@ struct Process {
 };
 
 void printTable(struct Process p[], int n) {
+    int total_wt = 0, total_tat = 0;
     printf("\nProcess Table:\n");
-    printf("+-----+------------+------------+----------+------------+------------+\n");
+    printf("|-----|------------|------------|----------|------------|------------|\n");
     printf("| PID | Arrival AT | Burst BT   | Priority | TAT        | WT         |\n");
-    printf("+-----+------------+------------+----------+------------+------------+\n");
+    printf("|-----|------------|------------|----------|------------|------------|\n");
+
     for (int i = 0; i < n; i++) {
         p[i].tat = p[i].ct - p[i].at;
         p[i].wt = p[i].tat - p[i].bt;
-        printf("| %3d | %10d | %10d | %8d | %10d | %10d |\n", p[i].id, p[i].at, p[i].bt, p[i].priority, p[i].tat, p[i].wt);
+        total_tat += p[i].tat;
+        total_wt += p[i].wt;
+        printf("| %3d | %10d | %10d | %8d | %10d | %10d |\n",
+               p[i].id, p[i].at, p[i].bt, p[i].priority, p[i].tat, p[i].wt);
     }
-    printf("+-----+------------+------------+----------+------------+------------+\n");
+
+    printf("|-----|------------|------------|----------|------------|------------|\n");
+    printf("\nAverage Turnaround Time: %.2f", (float)total_tat / n);
+    printf("\nAverage Waiting Time: %.2f\n", (float)total_wt / n);
 }
 
 void sortByArrival(struct Process p[], int n) {
@@ -31,7 +40,6 @@ void sortByArrival(struct Process p[], int n) {
     }
 }
 
-// First Come First Serve (FCFS)
 void FCFS(struct Process p[], int n) {
     int time = 0;
     printf("\nGantt Chart (FCFS): ");
@@ -45,7 +53,6 @@ void FCFS(struct Process p[], int n) {
     printTable(p, n);
 }
 
-// Shortest Job First (Non-Preemptive)
 void SJF_NonPreemptive(struct Process p[], int n) {
     int completed = 0, time = 0;
     printf("\nGantt Chart (SJF Non-Preemptive): ");
@@ -71,7 +78,6 @@ void SJF_NonPreemptive(struct Process p[], int n) {
     printTable(p, n);
 }
 
-// Shortest Remaining Time First (SRTF)
 void SRTF(struct Process p[], int n) {
     int completed = 0, time = 0;
     printf("\nGantt Chart (SRTF): ");
@@ -100,7 +106,6 @@ void SRTF(struct Process p[], int n) {
     printTable(p, n);
 }
 
-// Round Robin Scheduling
 void RoundRobin(struct Process p[], int n, int quantum) {
     int time = 0, completed = 0;
     printf("\nGantt Chart (Round Robin, Q=%d): ", quantum);
@@ -127,7 +132,6 @@ void RoundRobin(struct Process p[], int n, int quantum) {
     printTable(p, n);
 }
 
-// Priority Scheduling (Non-Preemptive)
 void Priority_NonPreemptive(struct Process p[], int n) {
     int completed = 0, time = 0;
     printf("\nGantt Chart (Priority Non-Preemptive): ");
@@ -153,7 +157,6 @@ void Priority_NonPreemptive(struct Process p[], int n) {
     printTable(p, n);
 }
 
-// Priority Scheduling (Preemptive)
 void Priority_Preemptive(struct Process p[], int n) {
     int completed = 0, time = 0;
     printf("\nGantt Chart (Priority Preemptive): ");
@@ -226,3 +229,5 @@ int main() {
 
     return 0;
 }
+
+
